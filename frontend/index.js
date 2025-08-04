@@ -23,7 +23,7 @@ app.post('/submit-feedback', express.urlencoded({ extended: true }), async (req,
 
     try {
         await axios.post('http://localhost:5000/feedback', feedbackData);
-        res.send('Feedback sent successfully! <a href="/">Go Back</a>');
+        res.send('Feedback Recieved successfully! <a href="/">Go Back</a>');
     } catch (error) {
         res.send('Failed to send feedback.');
     }
