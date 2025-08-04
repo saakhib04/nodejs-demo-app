@@ -10,21 +10,11 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
 
-    services:
-      flask-api:
-        image: python:3.10
-        ports:
-          - 5000:5000
-        options: >-
-          --health-cmd="curl http://localhost:5000/feedback || exit 1"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # --- Node.js frontend setup ---
     - name: Set up Node.js
       uses: actions/setup-node@v4
       with:
@@ -35,11 +25,12 @@ jobs:
         cd frontend
         npm install
 
-    - name: Run frontend build/test (if needed)
+    - name: Run frontend build/test
       run: |
         cd frontend
         npm run build || echo "No build script"
 
+    # --- Python Flask backend setup ---
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -50,6 +41,12 @@ jobs:
         cd backend
         pip install -r requirements.txt
 
-    - name: Run backend tests (if any)
+    - name: Start Flask app (background)
       run: |
-        echo "No tests yet"
+        cd backend
+        nohup python app.py &
+        sleep 5  # wait for server to be ready
+
+    - name: Test Flask app is running
+      run: |
+        curl http://localhost:5000/feedback || echo "Flask API not responding"
