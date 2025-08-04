@@ -1,0 +1,24 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+venv/
+env/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+
+# Environment variables
+.env
+
+# Flask files
+instance/
+*.sqlite3
+
+# Docker
+*.pid
